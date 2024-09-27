@@ -1,20 +1,17 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Home from './pages/Home';
-import Navbar from './components/Navbar/Navbar';
+import { useContext } from 'react'
+import './App.css'
+import Dashboard from './routes/DashboardRoutes'
+import LoginRoutes from './routes/LoginRoutes'
+import { Context } from './context/Index'
 
 function App() {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
-  );
+  const {token} = useContext(Context)
+  if(token) {
+    return <Dashboard/>
+  }
+  else{
+    return <LoginRoutes/>
+  }
 }
 
-export default App;
+export default App

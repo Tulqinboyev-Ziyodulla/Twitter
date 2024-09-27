@@ -1,72 +1,58 @@
-import { useState } from 'react';
+import React, {  useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import Logo from "../assets/images/logo.svg"
+import LoginInput from '../components/Input'
+import Button from '../components/Button'
+import loading from "../assets/images/loading.png"
+import toast, { Toaster } from 'react-hot-toast'
+import { Context } from '../context/Index'
 
-const Register = () => {
-  const [loading, setLoading] = useState(false);
+function Register() {
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
+  const { setRegister} = useContext(Context)
 
-  const handleRegister = () => {
-    setLoading(true);
+  function handleRegisterSubmit(e){
+    e.preventDefault()
+    const data = {
+      login:e.target.name.value.trim(),
+      password:e.target.tel.value.trim()
+    }
+    setIsLoading(true)
+    toast.success(`Successfully registered "${ data.login.toUpperCase()}"`)
     setTimeout(() => {
-      setLoading(false);
-      alert("Registration successful!");
-    }, 2000);
-  };
-
+      setRegister(data)
+      navigate(-1)
+    }, 800);
+  }
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-md">
-        <h2 className="text-center text-2xl font-bold mb-6">Create an account</h2>
-        
-        <div className="space-y-4">
-          <input 
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text" 
-            placeholder="Name" 
-          />
-          <input 
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text" 
-            placeholder="Phone or email" 
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date of birth</label>
-            <p className="text-gray-500 text-sm mb-2">
-              This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.
-            </p>
-            <div className="flex space-x-2">
+    <form onSubmit={handleRegisterSubmit} className='w-[670px] mx-auto mt-[60px] pb-[20px]' autoComplete='off'>
+      <Toaster position="top-right" reverseOrder={false}/>
+      <Link to={"/"}>
+        <img className='mx-auto' src={Logo} alt="logo img" width={40} height={33} />
+      </Link>
+      <h2 className='font-bold text-[30px] leading-[39px] mt-[43px] mb-[35px] '>Create an account</h2>
+      <LoginInput extraStyle={"mb-[25px]"} placeholder={"Name"} name={"name"} type={"text"} />
+      <LoginInput placeholder={"Phone number"} name={"tel"} type={"tel"} />
+      <Link to={"/"} className='mt-[30px] block text-[#1DA1F2] text-[16px] leading-[23px]'>Use email</Link>
+      <div className=" mt-[40px]">
+      <div className="flex space-x-2">
               <select className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Month</option>
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                {/* Add other months */}
               </select>
               <select className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Day</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                {/* Add other days */}
               </select>
               <select className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Year</option>
-                <option>1990</option>
-                <option>1991</option>
-                <option>1992</option>
-                {/* Add other years */}
               </select>
             </div>
-          </div>
-        </div>
-
-        <button 
-          className="mt-6 w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-colors duration-300"
-          onClick={handleRegister}
-        >
-          {loading ? "Loading..." : "Next"}
-        </button>
       </div>
-    </div>
-  );
-};
+      <Button extraStyle={"mt-[65px] h-[59px]  hover:bg-transparent border-[2px] hover:border-[#1DA1F2] hover:text-[#1DA1F2] duration-300"} type={"submit"} >
+        {isLoading ? <img className='scale-[3] mx-auto' src={loading} alt="loading img" width={22} />: "Next"}
+      </Button>
+    </form>
+  )
+}
 
-export default Register;
+export default Register
